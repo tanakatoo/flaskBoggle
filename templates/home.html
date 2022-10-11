@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Play Boggle{% endblock %}
+{% block content %}
+<table>
+    {% for i in the_board %}
+    <tr>
+    {% for j in i %} 
+        <td>{{j}}</td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+<section>
+    <form id="myForm" method="POST">
+        <label for="guess">Guess the word:</label>
+        <input type="text" class="text" name="guess" />
+        <button id="submitGuess">Submit</button>
+    </form>
+</section>
+{% endblock %}

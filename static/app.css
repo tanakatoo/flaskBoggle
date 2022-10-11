@@ -1,0 +1,19 @@
+table{
+    margin: 0 auto;
+    border-collapse:collapse;
+}
+
+tr{
+    padding: 20px;
+}
+
+td{
+    padding: 20px;
+    border: 1px solid #eee;
+}
+
+section{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
