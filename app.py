@@ -36,30 +36,14 @@ def check_word():
 
 @app.route('/more_statistics', methods=["POST"])
 def more_stats():
-    score=request.json
-    print('*from request*')
-    print(score)
-    print('****')
-    print(session)
-    if 'score' in session:
-        print("****score is in session")
-        highest = session['score']
+    score=request.json['score']
+    
+    if session.get('score',0) < score :
         
-    else:
-        print("****score is NOT in session")
-        session['score'] = 0
-        highest=0
-    print('*****highest socre in session *******')
-    print(highest)
-    session['score']=highest
-    if highest < score['score']:
-        session['score'] = score
+        session['score']=score
+    
     attempts=session.get('attempt',0)
     attempts+=1
     session['attempt']=attempts
-    print('***score*****')
-    print(session['score'])
-    print('***attempt*****')
-    print(session['attempt'])
-    
+  
     return jsonify(session['score'])

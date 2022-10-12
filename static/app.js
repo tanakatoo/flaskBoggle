@@ -1,62 +1,91 @@
-
 BASE_URL = "http://127.0.0.1:5000"
-let score = 0
+class WordList {
+    constructor() {
+        this.usedWords = new Set()
+        this.score = 0
 
-$("#myForm").on("submit", sendData)
+        setTimeout(this.timesUp, 20000)
 
-setTimeout(function () {
-    $('#submitGuess').prop('disabled', true)
-    $('#guess').prop('disabled', true)
-    $('#timer').text('Time is up!')
-    //save the highest score in session and how many times they played
-    moreStatistics()
-}, 10000)
+        //we put the submit button here and bind it here so that it will pass THIS particular form 
+        $("#myForm").on("submit", this.checkCorrectness.bind(this))
+    }
 
-async function sendData(e) {
-    e.preventDefault()
-    word = $("#guess").val()
-    console.log(word)
-    try {
-        const response = await axios({
-            url: `${BASE_URL}/check_word`,
-            method: "GET",
-            params: {
-                guess: word
-            }
-        });
-        console.log(response)
+    checkDup(word) {
+        return this.usedWords.has(word)
+    }
 
-        if (response.data.result == "ok") {
-            $("#result").text('Good guess!')
-            // add score
-            score += word.length
+    listWords(word) {
+        $("#listOfWords").append(`<li>${word}</li>`)
 
-        } else if (response.data.result == "not-on-board") {
-            $("#result").text('Doesn not exist on board!')
-        } else {
-            $("#result").text('Not a word!')
+    }
+    async timesUp() {
+        $('#submitGuess').prop('disabled', true)
+        $('#guess').prop('disabled', true)
+        $('#timer').text('Time is up!')
+        //save the highest score in session and how many times they played
+        await this.moreStatistics()
+    }
+
+    addToList(word) {
+        this.usedWords.add(word)
+    }
+
+    async checkCorrectness(e) {
+        console.log(e)
+        e.preventDefault()
+        let word = $("#guess").val()
+
+        if (this.checkDup(word)) {
+            $('#result').text('already used!')
         }
-        $("#score").text(`Your score is ${score}!`)
-    } catch (e) {
-        console.log(e)
-        console.log('something went wrong')
-    }
-}
 
-async function moreStatistics() {
-    try {
-        const response = await axios({
-            url: `${BASE_URL}/more_statistics`,
-            method: "POST",
-            data: {
-                score: score
+        try {
+            const response = await axios({
+                url: `${BASE_URL}/check_word`,
+                method: "GET",
+                params: {
+                    guess: word
+                }
+            });
+
+            if (response.data.result == "ok") {
+                $("#result").text('Good guess!')
+                // add score
+                this.score += word.length
+                $('#guess').val('')
+                this.addToList(word)
+                this.listWords(word)
+            } else if (response.data.result == "not-on-board") {
+                $("#result").text('Doesn not exist on board!')
+            } else if (response.data.result = "not-a-word") {
+                $("#result").text('Not a word!')
             }
-        });
-        console.log(response)
+            $("#score").text(`Your score is ${this.score}!`)
+        } catch (e) {
+            console.log(e)
+            console.log('something went wrong')
+        }
+    }
 
+    async moreStatistics() {
+        try {
+            const response = await axios({
+                url: `${BASE_URL}/more_statistics`,
+                method: "POST",
+                data: {
+                    score: this.score
+                }
+            });
+            console.log(response)
+            $('#highestScore').text(`Your highest score is ${response.data}`)
 
-    } catch (e) {
-        console.log(e)
-        console.log('something went wrong')
+        } catch (e) {
+            console.log(e)
+            console.log('something went wrong in more statistics')
+        }
     }
 }
+
+
+
+
