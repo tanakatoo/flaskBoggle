@@ -17,3 +17,7 @@ section{
     justify-content: center;
     margin: 20px;
 }
+
+p{
+    display: block;
+}

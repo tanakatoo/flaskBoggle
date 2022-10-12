@@ -11,10 +11,18 @@
     {% endfor %}
 </table>
 <section>
-    <form id="myForm" method="POST">
+    <form id="myForm">
         <label for="guess">Guess the word:</label>
-        <input type="text" class="text" name="guess" />
+        <input type="text" class="text" name="guess" id="guess" />
         <button id="submitGuess">Submit</button>
     </form>
 </section>
+<div>
+    <p id="result"></p>
+    <p id="score"></p>
+    <p id="highestScore"></p>
+    <p id="timer"></p>
+    <p id="attempt"></p>
+
+</div>
 {% endblock %}

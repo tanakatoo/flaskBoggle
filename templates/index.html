@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Play Boggle{% endblock %}
+{% block content %}
+<h1>Play Boggle!</h1>
+<h3>You have 60 seconds once you press START to guess a word!</h3>
+<form action="/startGame">
+    <button>START</button>
+</form>
+{% endblock %}
