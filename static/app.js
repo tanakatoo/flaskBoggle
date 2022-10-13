@@ -4,7 +4,7 @@ class WordList {
         this.usedWords = new Set()
         this.score = 0
 
-        setTimeout(this.timesUp, 20000)
+        setTimeout(this.timesUp.bind(this), 10000)
 
         //we put the submit button here and bind it here so that it will pass THIS particular form 
         $("#myForm").on("submit", this.checkCorrectness.bind(this))
@@ -85,7 +85,6 @@ class WordList {
         }
     }
 }
-
 
 
 

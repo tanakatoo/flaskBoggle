@@ -14,20 +14,28 @@ boggle_game = Boggle()
 
 @app.route('/')
 def home():
+    """
+    displays the beginnnig of the game with a start button
+    """
     return render_template('index.html')
 
-def generate_board():
-    the_board = boggle_game.make_board()
-    return the_board
 
 @app.route('/startGame')
 def start():
-    the_board=generate_board()
+    """
+    make the board, save it to a session and display on screen
+    """
+    the_board=boggle_game.make_board()
     session['board'] = the_board
     return render_template('home.html', the_board=the_board)
 
 @app.route('/check_word')
 def check_word():
+    """
+    takes the user's guess and checks to see if it is valid
+    returns the result:
+    "ok", "not-a-word", "not-on-board"
+    """
     the_board =session['board']
     guess = request.args['guess']
    
@@ -36,6 +44,10 @@ def check_word():
 
 @app.route('/more_statistics', methods=["POST"])
 def more_stats():
+    """
+    saves the highest score and how many times they played the game 
+    returns the highest score
+    """
     score=request.json['score']
     
     if session.get('score',0) < score :
